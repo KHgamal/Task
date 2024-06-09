@@ -5,8 +5,8 @@ import 'package:flutter_task/features/home/presentation/controller/cubit/reposit
 import '../../../../core/common/colors.dart';
 
 class MyAppBar extends StatefulWidget implements PreferredSizeWidget {
-  const MyAppBar({super.key});
-
+  const MyAppBar({super.key, required this.searchController});
+final TextEditingController searchController;
   @override
   State<MyAppBar> createState() => _AppBarState();
   
@@ -19,7 +19,15 @@ class _AppBarState extends State<MyAppBar> {
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: ColorPalette.deepGreen,
-        title: const Text('GitHub Repos' , style: TextStyle(color: Colors.white),),
+        title:TextField(
+          controller: widget.searchController,
+          decoration:const InputDecoration(
+            hintText: 'Search...',
+            border: InputBorder.none,
+            hintStyle: TextStyle(color: Colors.white),
+          ),
+          style: TextStyle(color: Colors.white),
+        ) ,
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh , color: Colors.white,),
