@@ -10,7 +10,7 @@ class RepositoryCubit extends Cubit<RepositoryState> {
 
   RepositoryCubit({required this.fetchRepositories}) : super(RepositoryInitial());
 
-  void loadRepositories() async {
+  Future<void> loadRepositories() async {
     if (state is RepositoryLoading) return;
 
     emit(RepositoryLoading());
@@ -28,10 +28,11 @@ class RepositoryCubit extends Cubit<RepositoryState> {
     );
   }
 
-  void refreshRepositories() async {
+  Future<void>  refreshRepositories() async {
     currentPage = 1;
     hasMore = true;
-    loadRepositories();
+    emit(RepositoryInitial());
+    await loadRepositories();
   }
 
   String _mapFailureToMessage(Failure failure) {
