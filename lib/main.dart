@@ -9,6 +9,7 @@ import 'package:flutter_task/features/home/presentation/controller/cubit/reposit
 import 'package:flutter_task/features/home/presentation/views/home.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:workmanager/workmanager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,6 +24,30 @@ void main() async {
      localDataSource: repositoryLocalDataSource);
   final fetchRepositories = FetchRepositories(repositoryRepository);
   runApp( MyApp(fetchRepositories: fetchRepositories,));
+  Workmanager().initialize(callbackDispatcher);
+  Workmanager().registerPeriodicTask(
+    "1",
+    "refreshRepositories",
+    frequency: Duration(hours: 1),
+  );
+}
+void callbackDispatcher() {
+  Workmanager().executeTask((task, inputData) async {
+    // Initialize Hive
+    final appDocumentDirectory = await getApplicationDocumentsDirectory();
+    Hive.init(appDocumentDirectory.path);
+    final repositoryBox = await Hive.openBox<Repository>('repositoryBox');
+    final repositoryLocalDataSource = RepositoryLocalDataSourceImpl(repositoryBox);
+    final repositoryRemoteDataSource = RepositoryRemoteDataSourceImpl();
+    final repositoryRepository = RepositoryRepositoryImpl(
+      remoteDataSource: repositoryRemoteDataSource,
+      localDataSource: repositoryLocalDataSource,
+    );
+    final fetchRepositories = FetchRepositories(repositoryRepository);
+
+    await fetchRepositories.call(Params(page: 1, perPage: 10));
+    return Future.value(true);
+  });
 }
 
 class MyApp extends StatelessWidget {
