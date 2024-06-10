@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_task/features/home/presentation/controller/cubit/repository_cubit.dart';
 import 'package:flutter_task/features/home/presentation/widgets/appbar.dart';
 
-import '../../../../core/common/colors.dart';
 import '../controller/cubit/repository_state.dart';
 import '../widgets/list_container.dart';
 
@@ -46,7 +45,7 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorPalette.deepGreen,
+     // backgroundColor: ColorPalette.deepGreen,
       appBar: MyAppBar(searchController: _searchController,),
        body: BlocBuilder<RepositoryCubit, RepositoryState>(
         builder: (context, state) {
@@ -64,7 +63,7 @@ class _HomeViewState extends State<HomeView> {
                     return const Center(child: CircularProgressIndicator());
                   }
                   final repo = repositories[index];
-                  return ListContainer(repository: repo);
+                  return Flexible(child: ListContainer(repository: repo));
                 },
               ),
             );

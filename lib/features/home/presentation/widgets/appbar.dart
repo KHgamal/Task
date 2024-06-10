@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_task/features/home/presentation/controller/cubit/repository_cubit.dart';
 
@@ -18,15 +19,16 @@ class _AppBarState extends State<MyAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: ColorPalette.deepGreen,
-        title:TextField(
+       // backgroundColor: ColorPalette.deepGreen,
+     backgroundColor: ColorPalette.deepGreen,
+             title:TextField(
           controller: widget.searchController,
           decoration:const InputDecoration(
             hintText: 'Search...',
             border: InputBorder.none,
             hintStyle: TextStyle(color: Colors.white),
           ),
-          style: TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white),
         ) ,
         actions: [
           IconButton(
@@ -35,7 +37,7 @@ class _AppBarState extends State<MyAppBar> {
               context.read<RepositoryCubit>().refreshRepositories();
             },
           ),
-        ],
+        ], 
       );
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_task/core/common/colors.dart';
 import 'package:flutter_task/features/home/data/datasources/repository_local_data_source.dart';
 import 'package:flutter_task/features/home/data/datasources/repository_remote_data_source.dart';
 import 'package:flutter_task/features/home/data/repositories/repository_repository_impl.dart';
@@ -12,16 +11,12 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:workmanager/workmanager.dart';
 
-import 'core/constants/constants.dart';
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Hive.initFlutter();
-
+    final appDocumentDirectory = await getApplicationDocumentsDirectory();
+  Hive.init(appDocumentDirectory.path);
   Hive.registerAdapter(RepositoryAdapter());
-
-  final repositoryBox = await Hive.openBox<Repository>(kHiveBoxname);
-
+  final repositoryBox = await Hive.openBox<Repository>('repositoryBox');
   final repositoryLocalDataSource = RepositoryLocalDataSourceImpl(repositoryBox);
   final repositoryRemoteDataSource = RepositoryRemoteDataSourceImpl();
   final repositoryRepository = RepositoryRepositoryImpl(
@@ -63,19 +58,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-       theme: ThemeData(
-        appBarTheme: AppBarTheme(
-        backgroundColor: ColorPalette.deepGreen,
-      ),
-    colorScheme: ColorScheme.fromSwatch(
-                  primarySwatch: Colors.green,
-      ),
-        useMaterial3: false,
+      theme: ThemeData(
+         colorScheme: ColorScheme.fromSwatch(
+        primarySwatch: Colors.green,
       ), 
+        useMaterial3: true,
+      ),
       home: BlocProvider(
         create: (context)=> RepositoryCubit(fetchRepositories: fetchRepositories),
         child: const HomeView()),
     );
   }
 }
-

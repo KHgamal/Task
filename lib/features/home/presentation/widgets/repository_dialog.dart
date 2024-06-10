@@ -14,14 +14,14 @@ void showRepositoryDialog(BuildContext context, Repository repo) {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                _launchURL(repo.repoUrl);
+                launchURL(repo.repoUrl);
               },
               child: const Text('Repository'),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                _launchURL(repo.ownerUrl);
+                launchURL(repo.ownerUrl);
               },
               child: const Text('Owner'),
             ),
@@ -30,7 +30,7 @@ void showRepositoryDialog(BuildContext context, Repository repo) {
       },
     );
   }
-   void _launchURL(String url) async {
+   void launchURL(String url) async {
     if (await canLaunch(url)) {
       await launch(url);
     } else {

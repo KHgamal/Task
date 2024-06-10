@@ -16,6 +16,9 @@ class RepositoryCubit extends Cubit<RepositoryState> {
   bool _hasMore = true;
   List<Repository> _repositories = [];
   List<Repository> _filteredRepositories = [];
+  bool get hasMore => _hasMore;
+  List<Repository> get repositories => _repositories;
+  List<Repository> get filteredRepositories => _filteredRepositories;
 
   Future<void> loadRepositories() async {
     if (state is RepositoryLoading) return;

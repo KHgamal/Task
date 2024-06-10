@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
+import '../../../../core/constants/constants.dart';
 import '../../../../core/error/failure.dart';
 import '../models/repository_model.dart';
 
@@ -17,6 +19,8 @@ class RepositoryRemoteDataSourceImpl implements RepositoryRemoteDataSource {
 
     if (response.statusCode == 200) {
       List<dynamic> jsonData = json.decode(response.body);
+    //  var box =Hive.box(kHiveBoxname);
+    // box.addAll(values)
       return jsonData.map((json) => RepositoryModel.fromJson(json)).toList();
     } else {
       throw ServerFailure('Failed to load repositories');
